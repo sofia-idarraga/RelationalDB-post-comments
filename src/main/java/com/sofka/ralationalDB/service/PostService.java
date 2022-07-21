@@ -34,7 +34,7 @@ public class PostService implements IPostService{
     @Override
     public void deletePost(Post post) {
         Post postToBeDeleted = postRepository.findById(post.getId()).get();
-        if(postToBeDeleted.getComments().size() > 0){
+        if(postToBeDeleted.getComments().size() >= 0){
             postToBeDeleted.getComments().forEach(comment -> commentRepository.deleteById(comment.getId()));
         }
         postRepository.deleteById(post.getId());
@@ -42,7 +42,10 @@ public class PostService implements IPostService{
 
     @Override
     public void deleteComment(Comment comment) {
-        commentRepository.deleteById(comment.getId());
+        Post postOfComment = postRepository.findById(comment.getFkPostId()).get();
+        postOfComment.removeComment(comment);
+        postRepository.save(postOfComment);
+       commentRepository.deleteById(comment.getId());
     }
 
     @Override

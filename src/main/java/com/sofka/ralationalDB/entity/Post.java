@@ -1,7 +1,6 @@
 package com.sofka.ralationalDB.entity;
 
 import lombok.Data;
-import lombok.Generated;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,13 +25,18 @@ public class Post {
     private String title;
 
     @OneToMany(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL
     )
     private List<Comment> comments = new ArrayList<>();
 
     public Post addComment(Comment comment){
         this.comments.add(comment);
+        return this;
+    }
+
+    public Post removeComment(Comment comment){
+        this.comments.remove(comment);
         return this;
     }
 }
